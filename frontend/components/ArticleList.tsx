@@ -20,7 +20,7 @@ export default function ArticleList({ articles = [] }: ArticleListProps) {
               {article.category}
             </span>
             <time dateTime={article.createdAt} className="text-gray-500 text-sm">
-              {new Date(article.createdAt).toISOString().split('T')[0]}
+              {article.createdAt}
             </time>
           </div>
         </article>

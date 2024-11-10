@@ -10,13 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsController]
 final class CreateArticleAction 
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private Security $security
+        private Security $security,
+        private ValidatorInterface $validator
     ) {}
 
     #[Route('/api/articles', name: 'app_articles_create', methods: ['POST'])]
@@ -25,14 +27,30 @@ final class CreateArticleAction
         $data = json_decode($request->getContent(), true);
         
         $article = new Article();
-        $article->setTitle($data['title']);
-        $article->setContent($data['content']);
-        $article->setCategory($data['category']);
-        $article->setAuthor($this->security->getUser());
+        $article->title = $data['title'] ?? '';
+        $article->content = $data['content'] ?? '';
+        $article->category = $data['category'] ?? '';
+
+        $errors = $this->validator->validate($article);
+
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+            
+            return new JsonResponse([
+                'status' => 'error',
+                'errors' => $errorMessages
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $this->entityManager->persist($article);
         $this->entityManager->flush();
 
-        return new JsonResponse($article);
+        return new JsonResponse([
+            'status' => 'success',
+            'data' => $article
+        ], Response::HTTP_CREATED);
     }
 } 
