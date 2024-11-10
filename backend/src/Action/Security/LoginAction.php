@@ -23,9 +23,7 @@ final class LoginAction
         $error = $this->authenticationUtils->getLastAuthenticationError();
         
         if ($error) {
-            return new JsonResponse([
-                'error' => $error->getMessage()
-            ], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
         }
 
         return new JsonResponse(['message' => 'Authentication required'], Response::HTTP_UNAUTHORIZED);
