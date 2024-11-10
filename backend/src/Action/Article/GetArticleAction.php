@@ -16,13 +16,16 @@ final class GetArticleAction
         private ArticleRepository $articleRepository
     ) {}
 
-    #[Route('/api/articles/{id}', name: 'app_articles_get', methods: ['GET'])]
+    #[Route('/api/articles/{id}', name: 'app_article_get', methods: ['GET'])]
     public function __invoke(int $id): Response
     {
         $article = $this->articleRepository->find($id);
-        
+
         if (!$article) {
-            throw new NotFoundHttpException('Article not found');
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Article not found'
+            ], Response::HTTP_NOT_FOUND);
         }
 
         return new JsonResponse($article);

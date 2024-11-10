@@ -23,11 +23,13 @@ class ArticleTest extends TestCase
 
     public function testArticleJsonSerialization(): void
     {
+        $now = new \DateTimeImmutable();
         $article = new Article(
             id: 1,
             title: 'Test Title',
             content: 'Test Content',
-            category: 'Test Category'
+            category: 'Test Category',
+            createdAt: $now
         );
 
         $jsonData = $article->jsonSerialize();
@@ -37,6 +39,6 @@ class ArticleTest extends TestCase
         $this->assertEquals('Test Title', $jsonData['title']);
         $this->assertEquals('Test Content', $jsonData['content']);
         $this->assertEquals('Test Category', $jsonData['category']);
-        $this->assertNotEmpty($jsonData['createdAt']);
+        $this->assertEquals($now->format('c'), $jsonData['createdAt']);
     }
 } 

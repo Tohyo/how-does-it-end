@@ -2,14 +2,15 @@
 
 namespace App\Tests\Functional\Article;
 
-use App\Factory\ArticleFactory;
+use App\Tests\Factory\ArticleFactory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Test\Factories;
 
 class CreateArticleTest extends WebTestCase
 {
-    use ResetDatabase;
+    use ResetDatabase, Factories;
 
     public function testCreateArticleSuccessfully(): void
     {
@@ -32,7 +33,6 @@ class CreateArticleTest extends WebTestCase
         
         $responseData = json_decode($client->getResponse()->getContent(), true);
         $this->assertEquals('success', $responseData['status']);
-        $this->assertArrayHasKey('data', $responseData);
         $this->assertEquals('Test Article', $responseData['data']['title']);
     }
 
@@ -47,9 +47,9 @@ class CreateArticleTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'title' => 'Te',  // Too short
-                'content' => 'Short',    // Too short
-                'category' => ''         // Empty
+                'title' => 'Te', // Too short
+                'content' => 'Short',
+                'category' => ''
             ])
         );
 
