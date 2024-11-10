@@ -19,6 +19,7 @@ final class ListArticlesAction
     public function __invoke(): Response
     {
         $articles = $this->articleRepository->findBy([], ['createdAt' => 'DESC'], 10);
+
         return new JsonResponse($articles);
     }
 } 

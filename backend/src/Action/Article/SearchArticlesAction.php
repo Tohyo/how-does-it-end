@@ -23,6 +23,7 @@ final class SearchArticlesAction
         $category = $request->query->get('category');
 
         $articles = $this->articleRepository->search($query, $category);
+
         return new JsonResponse($articles);
     }
 } 

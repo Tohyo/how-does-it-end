@@ -71,16 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     }
 
     #[Assert\NotBlank(message: 'Password is required', groups: ['registration'])]
-    #[Assert\Length(
-        min: 8,
-        minMessage: 'Password must be at least {{ limit }} characters long',
-        groups: ['registration']
-    )]
-    #[Assert\Regex(
-        pattern: '/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/',
-        message: 'Password must contain at least one letter, one number, and one special character',
-        groups: ['registration']
-    )]
     public function getValidatedPlainPassword(): ?string
     {
         return $this->plainPassword;

@@ -26,10 +26,11 @@ final class CreateArticleAction
     {
         $data = json_decode($request->getContent(), true);
         
-        $article = new Article();
-        $article->title = $data['title'] ?? '';
-        $article->content = $data['content'] ?? '';
-        $article->category = $data['category'] ?? '';
+        $article = new Article(
+            title: $data['title'] ?? '',
+            content: $data['content'] ?? '',
+            category: $data['category'] ?? ''
+        );
 
         $errors = $this->validator->validate($article);
 
