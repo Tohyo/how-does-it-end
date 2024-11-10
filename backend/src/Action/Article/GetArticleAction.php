@@ -16,10 +16,10 @@ final class GetArticleAction
         private ArticleRepository $articleRepository
     ) {}
 
-    #[Route('/api/articles/{title}', name: 'app_articles_get', methods: ['GET'])]
-    public function __invoke(string $title): Response
+    #[Route('/api/articles/{id}', name: 'app_articles_get', methods: ['GET'])]
+    public function __invoke(int $id): Response
     {
-        $article = $this->articleRepository->findOneBy(['title' => $title]);
+        $article = $this->articleRepository->find($id);
         
         if (!$article) {
             throw new NotFoundHttpException('Article not found');
