@@ -21,8 +21,8 @@ describe('Home Page', () => {
   it('renders page with articles', async () => {
     render(await Home());
     
-    expect(screen.getByText('Latest Articles')).toBeInTheDocument();
-    expect(screen.getByText('Test Article')).toBeInTheDocument();
+    expect(screen.getByText('Recent Articles')).toBeInTheDocument();
+    expect(screen.getByText('View All Articles')).toBeInTheDocument();
   });
 
   it('fetches articles from the API', async () => {

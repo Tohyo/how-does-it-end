@@ -1,32 +1,21 @@
-import ArticleList from '@/components/ArticleList';
 import CreateArticleButton from '@/components/CreateArticleButton';
 import { Article } from '@/types/article';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { BookOpen, Film, Tv, AlertTriangle } from "lucide-react"
+import { BookOpen, Film, Tv, Clock } from "lucide-react"
 import Link from "next/link"
-
 
 // Server Component
 export default async function Home() {
-  // const response = await fetch(`${process.env.INTERNAL_API_URL}/api/articles`, {
-  //   cache: 'no-store',
-  //   headers: {
-  //     'Accept': 'application/json',
-  //   },
-  // });
-  // const articles: Article[] = await response.json();
-
-  // return (
-  //   <main className="container mx-auto px-4 py-8">
-  //     <div className="flex justify-between items-center mb-8">
-  //       <h1 className="text-4xl font-bold">Latest Articles</h1>
-  //       <CreateArticleButton />
-  //     </div>
-  //     <ArticleList articles={articles} />
-  //   </main>
-  // );
+  const response = await fetch(`${process.env.INTERNAL_API_URL}/api/articles`, {
+    cache: 'no-store',
+    headers: {
+      'Accept': 'application/json',
+    },
+  });
+  const articles: Article[] = await response.json();
+  
   return (
     <>
       <main className="flex-1">
@@ -110,6 +99,37 @@ export default async function Home() {
                   Share your own spoilers and help others satisfy their curiosity.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Recent Articles</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-5xl">
+              {articles.map((article) => (
+                <article key={article.id} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-red-500">{article.category}</span>
+                      {/* <time className="text-sm text-gray-500 dark:text-gray-400" dateTime={article.date}>
+                        {new Date(article.date).toLocaleDateString()}
+                      </time> */}
+                    </div>
+                    <h3 className="text-lg font-semibold leading-tight mb-2">
+                      <a href="#" className="hover:underline">
+                        {article.title}
+                      </a>
+                    </h3>
+                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <Clock className="h-4 w-4 mr-1" />
+                      <span>5 min read</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <Button variant="outline">View All Articles</Button>
             </div>
           </div>
         </section>

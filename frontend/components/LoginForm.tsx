@@ -30,15 +30,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         body: JSON.stringify(formData),
       });
 
-      console.log('response', response);
-
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
 
-      console.log('data', data);
       login(data.user);
       checkAuth();
       onSuccess?.();
