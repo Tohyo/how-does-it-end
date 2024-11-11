@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { AlertTriangle } from 'lucide-react';
 
 export default function Navigation() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -14,18 +15,14 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          <Link href="/" className="text-xl font-bold">
-            Blog
-          </Link>
-
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="hover:text-blue-600">
-              Articles
-            </Link>
-            {isAuthenticated ? (
+    <header className="px-4 lg:px-6 h-14 flex items-center border-b">
+      <div className="container mx-auto max-w-7xl flex justify-between items-center">
+        <Link className="flex items-center justify-center" href="#">
+          <AlertTriangle className="h-6 w-6 text-red-500" />
+          <span className="ml-2 text-2xl font-bold text-gray-900">SpoilerAlert</span>
+        </Link>
+        <nav className="flex gap-4 sm:gap-6">
+        {isAuthenticated ? (
               <>
                 <Link href="/articles/new" className="hover:text-blue-600">
                   New Article
@@ -54,11 +51,10 @@ export default function Navigation() {
                 >
                   Register
                 </Link>
-              </>
-            )}
-          </div>
-        </div>
+            </>
+          )}
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 } 
