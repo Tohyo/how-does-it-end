@@ -54,6 +54,6 @@ class GetArticleTest extends WebTestCase
         
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('error', $responseData['status']);
-        $this->assertEquals('Article not found', $responseData['message']);
+        $this->assertEquals('Resource not found', $responseData['message']);
     }
 } 

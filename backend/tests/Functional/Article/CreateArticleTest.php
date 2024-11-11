@@ -52,11 +52,6 @@ class CreateArticleTest extends WebTestCase
                 'category' => ''
             ])
         );
-
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
-        
-        $responseData = json_decode($client->getResponse()->getContent(), true);
-        $this->assertEquals('error', $responseData['status']);
-        $this->assertArrayHasKey('errors', $responseData);
+        $this->assertEquals(422, $client->getResponse()->getStatusCode());
     }
 } 

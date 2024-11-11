@@ -4,10 +4,10 @@ namespace App\Action\Article;
 
 use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 
 #[AsController]
 final class SearchArticlesAction
@@ -17,13 +17,11 @@ final class SearchArticlesAction
     ) {}
 
     #[Route('/api/articles/search', name: 'app_articles_search', methods: ['GET'])]
-    public function __invoke(Request $request): Response
+    public function __invoke(
+        #[MapQueryParameter] string $query,
+        #[MapQueryParameter] string $category
+    ): Response
     {
-        $query = $request->query->get('q');
-        $category = $request->query->get('category');
-
-        $articles = $this->articleRepository->search($query, $category);
-
-        return new JsonResponse($articles);
+        return new JsonResponse($this->articleRepository->search($query, $category));
     }
 } 
