@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
-
 interface LoginFormProps {
   onSuccess?: () => void;
 }
@@ -23,7 +22,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.PUBLIC_API_URL}/api/login`, {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,13 +33,10 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.error || 'Login failed');
       }
 
-      // Store the token
-      localStorage.setItem('token', data.token);
-      login(data.token, data.user);
-
+      login(data.user);
       onSuccess?.();
       router.push('/');
     } catch (err) {
