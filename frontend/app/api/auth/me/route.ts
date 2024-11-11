@@ -24,7 +24,6 @@ export async function GET() {
     // Decode the JWT token to get user information
     const decoded = jwtDecode<JWTPayload>(token.value);
 
-    console.log(decoded, token);
     // Check if token is expired
     if (decoded.exp * 1000 < Date.now()) {
       cookieStore.delete('token');

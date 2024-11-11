@@ -1,7 +1,6 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { cookies } from 'next/headers';
 
 interface User {
   id: number;
