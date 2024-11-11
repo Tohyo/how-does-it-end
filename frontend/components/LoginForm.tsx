@@ -15,7 +15,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   });
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, checkAuth } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +30,17 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         body: JSON.stringify(formData),
       });
 
+      console.log('response', response);
+
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
 
+      console.log('data', data);
       login(data.user);
+      checkAuth();
       onSuccess?.();
       router.push('/');
     } catch (err) {
