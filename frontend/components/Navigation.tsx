@@ -24,15 +24,15 @@ export default function Navigation() {
         <nav className="flex gap-4 sm:gap-6">
           {isAuthenticated ? (
             <>
-              <Link href="/articles/new" className="hover:text-blue-600">
+              <Link href="/articles/new" className="flex items-center justify-center hover:text-blue-600">
                 New Article
               </Link>
-              <span className="text-gray-600">
+              <span className="flex items-center justify-center text-gray-600">
                 {user?.email}
               </span>
               <button
                 onClick={handleLogout}
-                className="text-red-600 hover:text-red-800"
+                className="flex items-center justify-center text-red-600 hover:text-red-800"
               >
                 Logout
               </button>
@@ -41,13 +41,13 @@ export default function Navigation() {
             <>
               <Link
                 href="/login"
-                className="text-blue-600 hover:text-blue-800"
+                className="flex items-center justify-center text-blue-600 hover:text-blue-800"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Register
               </Link>
