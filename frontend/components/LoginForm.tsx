@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -14,6 +16,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   });
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +39,8 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
       // Store the token
       localStorage.setItem('token', data.token);
-      
+      login(data.token, data.user);
+
       onSuccess?.();
       router.push('/');
     } catch (err) {

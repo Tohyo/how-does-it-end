@@ -2,19 +2,14 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navigation() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem('token'));
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
+    logout();
     router.push('/login');
   };
 
@@ -30,12 +25,14 @@ export default function Navigation() {
             <Link href="/" className="hover:text-blue-600">
               Articles
             </Link>
-            
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <>
                 <Link href="/articles/new" className="hover:text-blue-600">
                   New Article
                 </Link>
+                <span className="text-gray-600">
+                  {user?.email}
+                </span>
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-800"
