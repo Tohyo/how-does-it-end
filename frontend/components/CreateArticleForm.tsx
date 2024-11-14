@@ -1,24 +1,25 @@
 'use client';
 
 import { useActionState  } from 'react';
-import { useFormStatus } from 'react-dom'
 import { createArticle } from '@/app/actions/articles';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  
+interface SubmitButtonProps {
+  isPending: boolean;
+}
+
+function SubmitButton({ isPending }: SubmitButtonProps) {
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? 'Creating...' : 'Create Article'}
+    <Button type="submit" disabled={isPending}>
+      {isPending ? 'Creating...' : 'Create Article'}
     </Button>
   );
 }
 
 export default function CreateArticleForm() {
-  const [state, formAction] = useActionState(createArticle, null);
+  const [error, formAction, isPending] = useActionState(createArticle, null);
 
   return (
     <form action={formAction} className="space-y-6">
@@ -65,9 +66,9 @@ export default function CreateArticleForm() {
         />
       </div>
 
-      {state?.error && (
+      {error && (
         <div className="text-red-600 text-sm" role="alert">
-          {state.error}
+          {error}
         </div>
       )}
 
@@ -75,7 +76,7 @@ export default function CreateArticleForm() {
         <Button type="button" variant="outline" formAction="/">
           Cancel
         </Button>
-        <SubmitButton />
+        <SubmitButton isPending={isPending} />
       </div>
     </form>
   );

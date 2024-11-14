@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 export async function createArticle(formData: FormData) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get('token');
 
   if (!token) {
@@ -28,8 +28,7 @@ export async function createArticle(formData: FormData) {
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create article');
+    return await response.json();
   }
 
   const article = await response.json();
