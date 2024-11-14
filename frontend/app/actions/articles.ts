@@ -12,8 +12,6 @@ export async function createArticle(formData: FormData) {
     redirect('/login');
   }
 
-  console.log(formData);
-
   const articleData = {
     title: formData.get('title'),
     content: formData.get('content'),
