@@ -73,7 +73,7 @@ export default function CreateArticleForm() {
       )}
 
       <div className="flex justify-end space-x-4">
-        <Button type="button" variant="outline" formAction="/">
+        <Button type="button" variant="outline">
           Cancel
         </Button>
         <SubmitButton isPending={isPending} />

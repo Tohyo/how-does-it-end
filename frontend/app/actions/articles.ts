@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-export async function createArticle(formData: FormData) {
+export async function createArticle(previousState: FormData, formData: FormData) {
   const cookieStore = await cookies();
   const token = cookieStore.get('token');
 
@@ -31,7 +31,7 @@ export async function createArticle(formData: FormData) {
     return await response.json();
   }
 
-  const article = await response.json();
+  const { data: article } = await response.json();
   revalidatePath('/');
   redirect(`/articles/${article.id}`);
 } 
