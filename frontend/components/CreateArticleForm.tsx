@@ -1,63 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useActionState  } from 'react';
+import { useFormStatus } from 'react-dom'
+import { createArticle } from '@/app/actions/articles';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from '@/contexts/AuthContext';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? 'Creating...' : 'Create Article'}
+    </Button>
+  );
+}
 
 export default function CreateArticleForm() {
-  const router = useRouter();
-  const { isAuthenticated } = useAuth();
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    category: ''
-  });
-  const [error, setError] = useState<string | null>(null);
-
-  if (!isAuthenticated) {
-    router.push('/login');
-    return null;
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
-    try {
-      const response = await fetch(`${process.env.PUBLIC_API_URL}/api/articles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to create article');
-      }
-
-      const { data: article } = await response.json();
-      router.push(`/articles/${article.id}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create article');
-    }
-  };
+  const [state, formAction] = useActionState(createArticle, null);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form action={formAction} className="space-y-6">
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
           Title
         </label>
         <Input
           id="title"
+          name="title"
           type="text"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Enter article title"
           required
           minLength={3}
@@ -71,9 +43,8 @@ export default function CreateArticleForm() {
         </label>
         <Input
           id="category"
+          name="category"
           type="text"
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           placeholder="Enter article category"
           required
           maxLength={100}
@@ -86,8 +57,7 @@ export default function CreateArticleForm() {
         </label>
         <Textarea
           id="content"
-          value={formData.content}
-          onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+          name="content"
           placeholder="Write your article content here..."
           required
           minLength={10}
@@ -95,23 +65,17 @@ export default function CreateArticleForm() {
         />
       </div>
 
-      {error && (
+      {state?.error && (
         <div className="text-red-600 text-sm" role="alert">
-          {error}
+          {state.error}
         </div>
       )}
 
       <div className="flex justify-end space-x-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.push('/')}
-        >
+        <Button type="button" variant="outline" formAction="/">
           Cancel
         </Button>
-        <Button type="submit">
-          Create Article
-        </Button>
+        <SubmitButton />
       </div>
     </form>
   );
