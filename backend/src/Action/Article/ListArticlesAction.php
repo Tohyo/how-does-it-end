@@ -18,8 +18,8 @@ final class ListArticlesAction
     #[Route('/api/articles', name: 'app_articles_list', methods: ['GET'])]
     public function __invoke(): Response
     {
-        $articles = $this->articleRepository->findBy([], ['createdAt' => 'DESC'], 10);
-
-        return new JsonResponse($articles);
+        return new JsonResponse(
+            $this->articleRepository->findBy([], ['createdAt' => 'DESC'], 10)
+        );
     }
 } 

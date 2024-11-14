@@ -2,22 +2,32 @@
 
 namespace App\Tests\Functional\Article;
 
+use App\Tests\Factory\ArticleFactory;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\ResetDatabase;
 use Zenstruck\Foundry\Test\Factories;
 
-class CreateArticleTest extends WebTestCase
+class UpdateArticleTest extends WebTestCase
 {
     use ResetDatabase, Factories;
 
-    public function testCreateArticleSuccessfully(): void
+    private KernelBrowser $client;
+
+    protected function setUp(): void
     {
-        $client = static::createClient();
-        
-        $client->request(
-            'POST',
-            '/api/articles',
+        $this->client = static::createClient();
+        parent::setUp();
+    }
+
+    public function testUpdateArticleSuccessfully(): void
+    {
+        $article = ArticleFactory::createOne();
+
+        $this->client->request(
+            'PUT',
+            '/api/articles/' . $article->getId(),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -28,20 +38,20 @@ class CreateArticleTest extends WebTestCase
             ])
         );
 
-        $this->assertEquals(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         
-        $responseData = json_decode($client->getResponse()->getContent(), true);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('success', $responseData['status']);
         $this->assertEquals('Test Article', $responseData['data']['title']);
     }
 
-    public function testCreateArticleWithInvalidData(): void
+    public function testUpdateArticleWithInvalidData(): void
     {
-        $client = static::createClient();
-        
-        $client->request(
-            'POST',
-            '/api/articles',
+        $article = ArticleFactory::createOne();
+
+        $this->client->request(
+            'PUT',
+            '/api/articles/' . $article->getId(),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -51,6 +61,6 @@ class CreateArticleTest extends WebTestCase
                 'category' => ''
             ])
         );
-        $this->assertEquals(422, $client->getResponse()->getStatusCode());
+        $this->assertEquals(422, $this->client->getResponse()->getStatusCode());
     }
 } 

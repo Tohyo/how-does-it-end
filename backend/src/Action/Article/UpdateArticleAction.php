@@ -5,10 +5,10 @@ namespace App\Action\Article;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 #[AsController]
 final class UpdateArticleAction
@@ -18,17 +18,13 @@ final class UpdateArticleAction
     ) {}
 
     #[Route('/api/articles/{id}', name: 'app_articles_update', methods: ['PUT'])]
-    public function __invoke(Article $article, Request $request): Response
+    public function __invoke(#[MapRequestPayload()] Article $article): Response
     {
-        $data = json_decode($request->getContent(), true);
-        
-        $article->setTitle($data['title']);
-        $article->setContent($data['content']);
-        $article->setCategory($data['category']);
-        $article->setUpdatedAt(new \DateTimeImmutable());
-
         $this->entityManager->flush();
 
-        return new JsonResponse($article);
+        return new JsonResponse([
+            'status' => 'success',
+            'data' => $article
+        ], Response::HTTP_OK);
     }
 } 
