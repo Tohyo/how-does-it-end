@@ -1,10 +1,16 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import ArticlePage from '../page';
 import { notFound } from 'next/navigation';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 jest.mock('next/navigation', () => ({
   notFound: jest.fn()
 }));
+
+const mockAuthContext = {
+  isAuthenticated: false,
+  // ... other auth context values you might need
+};
 
 describe('ArticlePage', () => {
   const mockArticle = {
@@ -29,7 +35,13 @@ describe('ArticlePage', () => {
   });
 
   it('renders article details correctly', async () => {
-    render(await ArticlePage({ params: { id: '1' } }));
+    await act(async () => {
+    render(
+      <AuthProvider value={mockAuthContext}>
+        {await ArticlePage({ params: { id: '1' } })}
+        </AuthProvider>
+      );
+    });
 
     expect(screen.getByText('Test Article')).toBeInTheDocument();
     expect(screen.getByText('Test content')).toBeInTheDocument();
