@@ -107,8 +107,9 @@ export default async function Home() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Recent Articles</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-5xl">
               {articles.map((article) => (
-                <article key={article.id} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden">
-                  <div className="p-6">
+                <Link href={`/articles/${article.id}`} key={article.id}>
+                  <article className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden">
+                    <div className="p-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-red-500">{article.category}</span>
                       {/* <time className="text-sm text-gray-500 dark:text-gray-400" dateTime={article.date}>
@@ -116,16 +117,15 @@ export default async function Home() {
                       </time> */}
                     </div>
                     <h3 className="text-lg font-semibold leading-tight mb-2">
-                      <a href="#" className="hover:underline">
-                        {article.title}
-                      </a>
+                      {article.title}
                     </h3>
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                       <Clock className="h-4 w-4 mr-1" />
                       <span>5 min read</span>
                     </div>
-                  </div>
-                </article>
+                    </div>
+                  </article>
+                </Link>
               ))}
             </div>
             <div className="text-center mt-8">
