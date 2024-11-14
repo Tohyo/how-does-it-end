@@ -1,6 +1,5 @@
 import { Article } from '@/types/article';
 import { notFound } from 'next/navigation';
-import { Badge } from "@/components/ui/badge";
 import EditableArticle from '@/components/EditableArticle';
 
 async function getArticle(id: string): Promise<Article> {

@@ -1,4 +1,3 @@
-import CreateArticleButton from '@/components/CreateArticleButton';
 import { Article } from '@/types/article';
 
 import { Button } from "@/components/ui/button"
@@ -6,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { BookOpen, Film, Tv, Clock } from "lucide-react"
 import Link from "next/link"
 
-// Server Component
 export default async function Home() {
   const response = await fetch(`${process.env.INTERNAL_API_URL}/api/articles`, {
     cache: 'no-store',

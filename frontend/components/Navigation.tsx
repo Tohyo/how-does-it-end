@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { AlertTriangle } from 'lucide-react';
-import CreateArticleButton from './CreateArticleButton';
 
 export default function Navigation() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -25,7 +24,7 @@ export default function Navigation() {
         <nav className="flex gap-4 sm:gap-6">
           {isAuthenticated ? (
             <>
-              <CreateArticleButton />
+              <Link href="/articles/new">Create Article</Link>
               <span className="flex items-center justify-center text-gray-600">
                 {user?.email}
               </span>
